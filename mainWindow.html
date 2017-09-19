@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <title>List Up</title>
+</head>
+<body>
+  <nav>
+    <div class="nav-wrapper">
+      <a class="brand-logo center">List Up</a>
+    </div>
+  </nav>
+  <ul></ul>
+  
+  <script>
+    const electron = require('electron');
+    const { ipcRenderer } = electron;
+    const ul = document.querySelector('ul');
+
+    // Add Item
+    ipcRenderer.on('item:add', (e, item) => {
+      ul.className = 'collection';
+      const li = document.createElement('li');
+      li.className = 'collection-item';
+      const itemText = document.createTextNode(item);
+      li.appendChild(itemText);
+      ul.appendChild(li);
+    });
+
+    // Clear Items
+    ipcRenderer.on('items:clear', () => {
+      ul.innerHTML = '';
+      ul.className = '';
+    });
+
+    // Remove Item
+    ul.addEventListener('dblclick', (e) => {
+      e.target.remove();
+      if (ul.children.length == 0) {
+        ul.className = '';
+      }
+    });
+  </script>
+</body>
+</html>
